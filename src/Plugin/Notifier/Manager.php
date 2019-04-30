@@ -3,6 +3,7 @@
 namespace Drupal\message_notify\Plugin\Notifier;
 
 use Drupal\Component\Plugin\Factory\DefaultFactory;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\message\MessageInterface;
@@ -11,6 +12,26 @@ use Drupal\message\MessageInterface;
  * Notifier plugin manager.
  */
 class Manager extends DefaultPluginManager {
+
+  /**
+   * Constructs a new class instance.
+   *
+   * @param string|bool $subdir
+   *   The plugin's subdirectory, for example Plugin/views/filter.
+   * @param \Traversable $namespaces
+   *   An object that implements \Traversable which contains the root paths
+   *   keyed by the corresponding namespace to look for plugin implementations.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param string|null $plugin_interface
+   *   The interface each plugin should implement.
+   * @param string $plugin_definition_annotation_name
+   *   The name of the annotation that contains the plugin definition.
+   */
+  public function __construct($subdir, \Traversable $namespaces, ModuleHandlerInterface $module_handler, $plugin_interface, $plugin_definition_annotation_name) {
+    parent::__construct($subdir, $namespaces, $module_handler, $plugin_interface, $plugin_definition_annotation_name);
+    $this->alterInfo('message_notifiers');
+  }
 
   /**
    * {@inheritdoc}
